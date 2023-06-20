@@ -1,7 +1,6 @@
 import Post from "../models/post.js";
 
 export function addPost(req, res) {
-  console.log(req.userData);
   let post = new Post();
   if (req.file) {
     const file = req.file;
@@ -40,7 +39,7 @@ export function getPosts(req, res) {
   post
     .then(async (posts) => {
       const count = await Post.count();
-      return res.status(200).json({posts, count});
+      return res.status(200).json({ posts, count });
     })
     .catch((err) => {
       return res.status(500).json(err);
@@ -48,9 +47,13 @@ export function getPosts(req, res) {
 }
 export function deletePost(req, res) {
   const id = req.params.id;
-  Post.findByIdAndDelete(id)
+  Post.deleteOne({ _id: id, creator: req.userData.userID })
     .then((post) => {
-      return res.status(200).json(post);
+      if (post.deletedCount > 0)
+        return res.status(200).json({ message: "post deleted" });
+      return res
+        .status(401)
+        .json({ message: "post not delete user not authorized" });
     })
     .catch((err) => {
       return res.status(500).json(err);
@@ -67,20 +70,27 @@ export function updatePost(req, res) {
       title: req.body.title,
       content: req.body.content,
       image: image,
+      creator: req.userData.userID,
     };
   } else {
     post = {
       title: req.body.title,
       content: req.body.content,
       image: req.body.image,
+      creator: req.userData.userID,
     };
   }
 
   const id = req.params.id;
 
-  Post.findByIdAndUpdate(id, post, { new: true })
+  Post.updateOne({ _id: id, creator: req.userData.userID }, post)
     .then((post) => {
-      return res.status(200).json(post);
+      if (post.modifiedCount > 0) {
+        return res.status(200).json({ message: "post updated" });
+      }
+      return res
+        .status(401)
+        .json({ message: "post not updated user not authorized" });
     })
 
     .catch((err) => {
