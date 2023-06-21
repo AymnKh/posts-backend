@@ -85,12 +85,16 @@ export function updatePost(req, res) {
 
   Post.updateOne({ _id: id, creator: req.userData.userID }, post)
     .then((post) => {
+      console.log(post)
       if (post.modifiedCount > 0) {
         return res.status(200).json({ message: "post updated" });
       }
-      return res
-        .status(401)
-        .json({ message: "post not updated .. user not authecticated !" });
+      if(post.modifiedCount == 0 && post.matchedCount ==0) {
+        return res
+            .status(401)
+            .json({ message: "post not updated .. user not authecticated !" });
+      }
+      return res.status(200).json({ message: "post updated" });
     })
 
     .catch((err) => {
