@@ -7,7 +7,7 @@ const auth = (req, res, next) => {
     req.userData = { email: userData.email, userID: userData.userID };
     next();
   } catch (error) {
-    return res.status(401).json({ message: "user not authorized !! " });
+    return res.status(401).json({ message: "user not authenticated !! " });
   }
 };
 

@@ -26,7 +26,7 @@ export function addPost(req, res) {
       return res.status(200).json(post);
     })
     .catch((err) => {
-      return res.status(500).json(err);
+      return res.status(500).json({message:'Creating post failed !'});
     });
 }
 export function getPosts(req, res) {
@@ -42,7 +42,7 @@ export function getPosts(req, res) {
       return res.status(200).json({ posts, count });
     })
     .catch((err) => {
-      return res.status(500).json(err);
+      return res.status(500).json({message:'Getting posts failed !'});
     });
 }
 export function deletePost(req, res) {
@@ -56,7 +56,7 @@ export function deletePost(req, res) {
         .json({ message: "post not delete user not authorized" });
     })
     .catch((err) => {
-      return res.status(500).json(err);
+      return res.status(500).json({message:'Delete post failed !'});
     });
 }
 export function updatePost(req, res) {
@@ -90,10 +90,10 @@ export function updatePost(req, res) {
       }
       return res
         .status(401)
-        .json({ message: "post not updated user not authorized" });
+        .json({ message: "post not updated .. user not authecticated !" });
     })
 
     .catch((err) => {
-      return res.status(500).json(err);
+      return res.status(500).json({message:'Update post failed !'});
     });
 }

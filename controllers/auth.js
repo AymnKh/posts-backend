@@ -20,7 +20,7 @@ export async function signup(req, res) {
       });
     })
     .catch((err) => {
-      return res.status(500).json(err);
+      return res.status(500).json({message:'Invalid Authentication credentials !'});
     });
 }
 
@@ -43,6 +43,6 @@ export function login(req, res) {
       });
     })
     .catch((err) => {
-      return res.status(500).json({ error: err.message });
+      return res.status(500).json({message:'Invalid Authentication credentials !'});
     });
 }
